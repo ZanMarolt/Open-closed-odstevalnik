@@ -1,0 +1,16 @@
+body {
+    font-family:tahoma;
+}
+
+#clockdiv {
+    
+    display:inline-block;
+}
+
+#clockdiv div {
+    display:inline-block;
+}
+
+#clockdiv div span {
+    font-weight:bold;
+}
