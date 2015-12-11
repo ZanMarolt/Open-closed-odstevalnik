@@ -82,10 +82,10 @@ $(document).ready(function() {
         },
         petek = {
             dan         :'petek',
-            zacetekUra  :'12',
-            zacetekMin  :'44',
-            konecUra    :'14',
-            konecMin    :'32'
+            zacetekUra  :'18',
+            zacetekMin  :'30',
+            konecUra    :'18',
+            konecMin    :'22'
         },
         sobota = {
             dan         :'sobota',
@@ -105,6 +105,8 @@ $(document).ready(function() {
         ura     :currentdate.getHours(),
         min     :currentdate.getMinutes()
     }
+    
+    console.log('Datum ura: '+Datum.ura);
     
     //calculate change in time 
     function getTimeRemaining(endtime){
@@ -161,20 +163,17 @@ $(document).ready(function() {
         var danasnjiDan = dnevi[currentdate.getDay()];
         var jutrisnjiDan = dnevi[currentdate.getDay()+1];
 
-        if (danasnjiDan.zacetekUra*1 > Datum.ura || danasnjiDan.konecUra*1 < Datum.ura){
+        if (danasnjiDan.zacetekUra*1 > Datum.ura && danasnjiDan.konecUra*1 < Datum.ura){
 
-            console.log('ZAPRTO');
             $('.openclosed').text('Odpremo').css("color","red");
             $('.adjx').text('odpremo čez');
             dan = danasnjiDan.zacetekUra;
             open = danasnjiDan.zacetekMin;
             incr = Datum.dan;
-            console.log(Datum.dan)
             rok(dan, open, incr);
 
         }else if (danasnjiDan.zacetekUra*1 === Datum.ura && danasnjiDan.zacetekMin*1 > Datum.min){
 
-            console.log('ZAPRTO');
             $('.openclosed').text('Zaprto').css("color","red");
             $('.adjx').text('odpremo čez');
             dan = danasnjiDan.zacetekUra;
@@ -183,7 +182,6 @@ $(document).ready(function() {
             rok(dan, open, incr);
 
         }else if(danasnjiDan.konecUra*1 < Datum.ura || danasnjiDan.konecUra*1 === Datum.ura && danasnjiDan.konecMin*1 <= Datum.min){
-            console.log('ZAPRTO');
             $('.openclosed').text('Zaprto').css("color","red");
             $('.adjx').text('odpremo čez');
             dan = jutrisnjiDan.zacetekUra;
@@ -191,7 +189,6 @@ $(document).ready(function() {
             incr = Datum.dan+1;
             rok(dan, open, incr);
         }else if(danasnjiDan.konecUra*1 < Datum.ura || danasnjiDan.konecUra*1 === Datum.ura && danasnjiDan.konecMin*1 <= Datum.min){
-            console.log('ZAPRTO');
             $('.openclosed').text('Zaprto').css("color","red");
             $('.adjx').text('odpremo čez');
             dan = jutrisnjiDan.zacetekUra;
@@ -199,7 +196,6 @@ $(document).ready(function() {
             incr = Datum.dan+1;
             rok(dan, open, incr);
         }else {
-            console.log('ODPRTO');
             $('.openclosed').text('Odprto').css("color","green");
             $('.adjx').text('še');
             dan = danasnjiDan.konecUra;
@@ -221,7 +217,7 @@ $(document).ready(function() {
             +' UTC+0100';
 
         console.log(deadline);
-        console.log('updated');
+        console.log('deadline updated');
         initializeClock('clockdiv', deadline);
 
         }
