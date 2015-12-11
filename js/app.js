@@ -82,10 +82,10 @@ $(document).ready(function() {
         },
         petek = {
             dan         :'petek',
-            zacetekUra  :'18',
-            zacetekMin  :'30',
-            konecUra    :'18',
-            konecMin    :'30'
+            zacetekUra  :'8',
+            zacetekMin  :'00',
+            konecUra    :'23',
+            konecMin    :'00'
         },
         sobota = {
             dan         :'sobota',
