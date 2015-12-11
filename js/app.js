@@ -85,7 +85,7 @@ $(document).ready(function() {
             zacetekUra  :'18',
             zacetekMin  :'30',
             konecUra    :'18',
-            konecMin    :'22'
+            konecMin    :'30'
         },
         sobota = {
             dan         :'sobota',

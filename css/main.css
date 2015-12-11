@@ -14,3 +14,7 @@ body {
 #clockdiv div span {
     font-weight:bold;
 }
+
+#PHPDate {
+    display:none;
+}
