@@ -1,61 +1,58 @@
-$(document).ready(function() {
+$(document).ready(function () {
     
-    var monthNames = ["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    var imenaDnevov = ['nedelja','ponedeljek','torek','sreda','cetrtek','petek','sobota'];
+    var DAN = Boolean;
 
     //dnevi in odpiralni casi
     var dnevi  = [
         nedelja = {
-            dan         :'nedelja',
-            zacetekUra  :'11',
-            zacetekMin  :'00',
-            konecUra    :'23',
-            konecMin    :'00'
+            dan         : 'nedelja',
+            zacetekUra  : '23',
+            zacetekMin  : '51',
+            konecUra    : '23',
+            konecMin    : '52'
         },
 
         ponedeljek = {
-            dan         :'ponedeljek',
-            zacetekUra  :'8',
-            zacetekMin  :'00',
-            konecUra    :'23',
-            konecMin    :'00'
+            dan         : 'ponedeljek',
+            zacetekUra  : '8',
+            zacetekMin  : '00',
+            konecUra    : '23',
+            konecMin    : '00'
         },
         torek = {
-            dan         :'torek',
-            zacetekUra  :'8',
-            zacetekMin  :'00',
-            konecUra    :'23',
-            konecMin    :'00'
+            dan         : 'torek',
+            zacetekUra  : '8',
+            zacetekMin  : '00',
+            konecUra    : '23',
+            konecMin    : '00'
         },
         sreda = {
-            dan         :'sreda',
-            zacetekUra  :'8',
-            zacetekMin  :'00',
-            konecUra    :'23',
-            konecMin    :'00'
+            dan         : 'sreda',
+            zacetekUra  : '8',
+            zacetekMin  : '00',
+            konecUra    : '23',
+            konecMin    : '00'
         },
         cetrtek = {
-            dan         :'cetrtek',
-            zacetekUra  :'8',
-            zacetekMin  :'00',
-            konecUra    :'23',
-            konecMin    :'00'
+            dan         : 'cetrtek',
+            zacetekUra  : '8',
+            zacetekMin  : '00',
+            konecUra    : '23',
+            konecMin    : '00'
         },
         petek = {
-            dan         :'petek',
-            zacetekUra  :'8',
-            zacetekMin  :'00',
-            konecUra    :'23',
-            konecMin    :'00'
+            dan         : 'petek',
+            zacetekUra  : '8',
+            zacetekMin  : '00',
+            konecUra    : '23',
+            konecMin    : '00'
         },
         sobota = {
-            dan         :'sobota',
-            zacetekUra  :'8',
-            zacetekMin  :'00',
-            konecUra    :'23',
-            konecMin    :'00'
+            dan         : 'sobota',
+            zacetekUra  : '8',
+            zacetekMin  : '00',
+            konecUra    : '23',
+            konecMin    : '00'
         }
     ];
     
@@ -64,12 +61,14 @@ $(document).ready(function() {
     var currentTimestamp        = $('#PHPDate').text()*1000;
     var incrementedTimestamp    = $('#PHPDate').text()*1000;
     var startTimestamp          = $('#PHPDate').text()*1000;
+    var nextDayStartTimestamp   = $('#PHPDate').text()*1000;
     var endTimestamp            = $('#PHPDate').text()*1000;
+    var deadline                = $('#PHPDate').text()*1000;
     
     // Start the seconds rolling
     function initiateSeconds(){
         incrementedTimestamp = incrementedTimestamp+1000;
-        console.log(incrementedTimestamp);
+        checkRestaurant();
     }
     
     // Keep incrementing seconds every second
@@ -92,8 +91,15 @@ $(document).ready(function() {
     // Calculate startTimestamp
     function calculateStartTimestamp() {
 
+        
+        // Check if the day needs changing
+        if(DAN){
+            var day = new Date(currentTimestamp).getDay();
+        }else{
+            var day = new Date(currentTimestamp).getDay()+1;
+        }
+        
         // Calculate Today's start Timestamp
-        var day = new Date(currentTimestamp).getDay()
         var startDayMinutes = dnevi[day].zacetekMin*1000*60;
         var startDayHours = dnevi[day].zacetekUra*1000*60*60;
 
@@ -109,8 +115,14 @@ $(document).ready(function() {
     // Calculate endTimestamp
     function calculateEndTimestamp() {
 
+        // Check if the day needs changing
+        if(DAN){
+            var day = new Date(currentTimestamp).getDay();
+        }else{
+            var day = new Date(currentTimestamp).getDay()+1;
+        }
+        
         // Calculate Today's end Timestamp
-        var day = new Date(currentTimestamp).getDay()
         var endDayMinutes = dnevi[day].konecMin*1000*60;
         var endDayHours = dnevi[day].konecUra*1000*60*60;
 
@@ -123,35 +135,83 @@ $(document).ready(function() {
     // Check Restaurant time till Open
     function checkRestaurant(){
         
-        console.log('endTimestamp: '+endTimestamp);
-        console.log('startTimestamp: '+startTimestamp);
-        console.log('startTimestamp: '+startTimestamp);
-        
         if(incrementedTimestamp <= startTimestamp){
             
-            console.log('Restavracija Zaprta.')
+            DAN = true;
+            text = 'Zaprto';
+            updateCountdown(incrementedTimestamp, startTimestamp);
             
         }else if (incrementedTimestamp >= endTimestamp){
-            console.log('Restavracija Zaprta.')
+            
+            DAN = false;
+            text = 'Zaprto';
+            
+            // Changing Date to tomorrow
+            dayBeginningTimestamp = dayBeginningTimestamp+1000*60*60*24;
+            
+            // Updating start and end timestamps to tomorrow's
+            calculateStartTimestamp();
+            calculateEndTimestamp()
+            
+            updateCountdown(incrementedTimestamp, startTimestamp);
+            
         }else{
             
-            console.log('Restavracija je odprta.')
+            DAN = true;
+            text = 'Odprto';
+            updateCountdown(incrementedTimestamp, endTimestamp);
+
         }
         
     }
     
     checkRestaurant();
     
+    // Update Countdown if neccessary
+    function updateCountdown(currentTime, deadline){
+        
+        var countdown = deadline - currentTime;
+        
+        updateHTML(countdown, text);
+        
+    }
     
+    // Bind countdown to HTML
+    
+    function updateHTML(countdown, text){
+        
+        var seconds = Math.floor( (countdown/1000) % 60 );
+        var minutes = Math.floor( (countdown/1000/60) % 60 );
+        var hours = Math.floor( (countdown/(1000*60*60)) % 24 );
+        var days = Math.floor( countdown/(1000*60*60*24) );  
+        
+        $('.seconds').text(seconds);
+        $('.minutes').text(minutes);
+        $('.hours').text(hours);
+        $('.days').text(days);
+        $('.openclosed').text(text);
+        
+        if($('.openclosed').text() === 'Odprto'){
+            $('.openclosed').css("color","#309f52");
+        }else{
+            $('.openclosed').css("color","#dd0301");
+        }
+        
+        hideElementIfZero($('.days'));
+        hideElementIfZero($('.hours'));
+        hideElementIfZero($('.minutes')); 
+        
+    }
 
-    
-    
-    
-    
-    
-    
-    
-    
+    // check if zero and hide it if true
+    function hideElementIfZero(element){
+        var openClose = element.text();
+        if (openClose === '0' || openClose === '00'){
+            element.parent().css("display","none");
+        }else{
+            element.parent().css("display","inline-block");
+        }
+    };
     
 });
     
