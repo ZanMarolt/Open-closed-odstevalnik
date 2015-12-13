@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>My Simple Website</title>
+    <title>Odstevalnik</title>
 
     <link rel="stylesheet" href="css/main.css">
 </head>
