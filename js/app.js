@@ -11,8 +11,8 @@ $(document).ready(function() {
             dan         :'nedelja',
             zacetekUra  :'11',
             zacetekMin  :'00',
-            konecUra    :'16',
-            konecMin    :'39'
+            konecUra    :'23',
+            konecMin    :'00'
         },
 
         ponedeljek = {
@@ -60,6 +60,7 @@ $(document).ready(function() {
     ];
     
     // Get PHP timestamp and saving it as a variable as beginning of time also converting from miliseconds to seconds
+    var dayBeginningTimestamp   = $('#PHPDate').text()*1000;
     var currentTimestamp        = $('#PHPDate').text()*1000;
     var incrementedTimestamp    = $('#PHPDate').text()*1000;
     var startTimestamp          = $('#PHPDate').text()*1000;
@@ -68,21 +69,28 @@ $(document).ready(function() {
     // Start the seconds rolling
     function initiateSeconds(){
         incrementedTimestamp = incrementedTimestamp+1000;
+        console.log(incrementedTimestamp);
     }
     
     // Keep incrementing seconds every second
     var secondsInterval = setInterval(initiateSeconds,1000);
     
-    // Calculate startTimestamp
-    function calculateStartTimestamp() {
+    // Calculate beginning timestamp
+    function calculateBeginningTimestamp(){
         
-        // Get minutes and seconds and substract them to get the startDay timestamp
+        // Get minutes and seconds and substract them to get the endDay timestamp
         var todaysDaySeconds = new Date(currentTimestamp).getSeconds()*1000;
         var todaysDayMinutes = new Date(currentTimestamp).getMinutes()*1000*60;
         var todaysDayHours = new Date(currentTimestamp).getHours()*1000*60*60;
 
         // Calculate Today's day beginning timestamp
-        var dayBeginningTimestamp = currentTimestamp-todaysDaySeconds-todaysDayMinutes-todaysDayHours;
+        dayBeginningTimestamp = currentTimestamp-todaysDaySeconds-todaysDayMinutes-todaysDayHours;
+    }
+    
+    calculateBeginningTimestamp();
+    
+    // Calculate startTimestamp
+    function calculateStartTimestamp() {
 
         // Calculate Today's start Timestamp
         var day = new Date(currentTimestamp).getDay()
@@ -100,14 +108,6 @@ $(document).ready(function() {
     
     // Calculate endTimestamp
     function calculateEndTimestamp() {
-        
-        // Get minutes and seconds and substract them to get the endDay timestamp
-        var todaysDaySeconds = new Date(currentTimestamp).getSeconds()*1000;
-        var todaysDayMinutes = new Date(currentTimestamp).getMinutes()*1000*60;
-        var todaysDayHours = new Date(currentTimestamp).getHours()*1000*60*60;
-
-        // Calculate Today's day beginning timestamp
-        var dayBeginningTimestamp = currentTimestamp-todaysDaySeconds-todaysDayMinutes-todaysDayHours;
 
         // Calculate Today's end Timestamp
         var day = new Date(currentTimestamp).getDay()
@@ -120,7 +120,27 @@ $(document).ready(function() {
     
     calculateEndTimestamp();
 
+    // Check Restaurant time till Open
+    function checkRestaurant(){
+        
+        console.log('endTimestamp: '+endTimestamp);
+        console.log('startTimestamp: '+startTimestamp);
+        console.log('startTimestamp: '+startTimestamp);
+        
+        if(incrementedTimestamp <= startTimestamp){
+            
+            console.log('Restavracija Zaprta.')
+            
+        }else if (incrementedTimestamp >= endTimestamp){
+            console.log('Restavracija Zaprta.')
+        }else{
+            
+            console.log('Restavracija je odprta.')
+        }
+        
+    }
     
+    checkRestaurant();
     
     
 
